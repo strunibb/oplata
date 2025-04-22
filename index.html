@@ -14,17 +14,31 @@
     <button onclick="sendData()">Подтвердить</button>
 
     <script>
-        // Получаем данные пользователя из Telegram
         const tg = window.Telegram.WebApp;
         const user = tg.initDataUnsafe.user;
 
-        function sendData() {
-            if (user && user.username) {
-                // Отправляем данные через Bot API
-                fetch(`https://api.telegram.org/bot7734815322:AAEhOUiC9YqZEzo45rYgpXJW5uYfC-iPo7o/sendMessage?chat_id=725158536&text=Пользователь @${user.username} оплатил абонемент`);
-                tg.close(); // Закрываем Web App
-            } else {
+        async function sendData() {
+            if (!user?.username) {
                 alert("Ошибка: войдите через Telegram!");
+                return;
+            }
+
+            try {
+                // Отправляем запрос через прокси (Google Apps Script)
+                const response = await fetch('ВАШ_GOOGLE_SCRIPT_URL', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user.username })
+                });
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    tg.close();
+                } else {
+                    alert('Ошибка отправки');
+                }
+            } catch (error) {
+                alert('Ошибка соединения');
             }
         }
     </script>
