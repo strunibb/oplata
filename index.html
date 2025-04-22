@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Подтверждение оплаты</title>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 20px; }
+        button { padding: 15px 30px; background: #4CAF50; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>🎸 Я оплатил абонемент!</h2>
+    <button onclick="sendData()">Подтвердить</button>
+
+    <script>
+        // Получаем данные пользователя из Telegram
+        const tg = window.Telegram.WebApp;
+        const user = tg.initDataUnsafe.user;
+
+        function sendData() {
+            if (user && user.username) {
+                // Отправляем данные через Bot API
+                fetch(`https://api.telegram.org/bot7734815322:AAEhOUiC9YqZEzo45rYgpXJW5uYfC-iPo7o/sendMessage?chat_id=725158536&text=Пользователь @${user.username} оплатил абонемент`);
+                tg.close(); // Закрываем Web App
+            } else {
+                alert("Ошибка: войдите через Telegram!");
+            }
+        }
+    </script>
+</body>
+</html>
